@@ -3,7 +3,7 @@ name: Deploy Frontend to cPanel
 on:
   push:
     branches:
-      - main
+      - development
 
 jobs:
   deploy:
