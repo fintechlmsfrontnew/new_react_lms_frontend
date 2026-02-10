@@ -1,0 +1,1132 @@
+/* Date range selector */
+.dashboard-date-range-wrap {
+  position: relative;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dashboard-date-range-trigger {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.dashboard-date-range-trigger:hover {
+  border-color: #065f46;
+  background: #f9fafb;
+}
+
+.dashboard-date-range-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+  opacity: 0.7;
+}
+
+.dashboard-date-range-icon--open {
+  transform: rotate(180deg);
+}
+
+.dashboard-date-range-trigger:hover .dashboard-date-range-icon {
+  opacity: 1;
+}
+
+.dashboard-date-range-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  padding: 4px 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  min-width: 160px;
+  z-index: 10;
+}
+
+.dashboard-date-range-option {
+  width: 100%;
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #374151;
+}
+
+.dashboard-date-range-option:hover {
+  background: #f3f4f6;
+}
+
+.dashboard-date-range-option--active {
+  background: #ecfdf5;
+  color: #065f46;
+}
+
+/* Metric card - Exact specifications from design tool */
+.dashboard-metric-card {
+  border-radius: 17px; /* Exact: 17px */
+  padding: 1.25rem;
+  color: white;
+  width: 282.62px; /* Exact width */
+  height: 285.81px; /* Exact height */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: visible;
+  min-width: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.dashboard-metric-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.dashboard-metric-card-title {
+  width: auto; /* Auto width to fit "Pending Sanction" in one line */
+  min-width: 99px; /* Minimum width */
+  min-height: 48px; /* Allow height to expand */
+  font-family: 'Inter', sans-serif;
+  font-weight: 600; /* Semi Bold */
+  font-size: 18px; /* Exact size */
+  line-height: 135%; /* Exact line height */
+  letter-spacing: 0%; /* Exact letter spacing */
+  color: rgba(255, 255, 255, 0.98);
+  display: block; /* Change to block for line breaks to work */
+  white-space: normal;
+}
+
+.dashboard-metric-card-rupee {
+  width: 18px; /* Exact width */
+  height: 43px; /* Exact height */
+  font-family: 'Inter', sans-serif;
+  font-weight: 600; /* Semi Bold */
+  font-size: 32px; /* Exact size */
+  line-height: 135%; /* Exact line height */
+  letter-spacing: 0%; /* Exact letter spacing */
+  color: #FFFFFF; /* Exact color */
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-metric-card-value {
+  width: 144px; /* Exact width */
+  height: 43px; /* Exact height */
+  font-family: 'Inter', sans-serif;
+  font-weight: 600; /* Semi Bold */
+  font-size: 32px; /* Exact size */
+  line-height: 135%; /* Exact line height */
+  letter-spacing: 0%; /* Exact letter spacing */
+  margin: 0.5rem 0;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-metric-card-breakdown {
+  margin-top: auto;
+  display: flex;
+  gap: 1rem;
+  padding: 0.875rem 1rem;
+  border-radius: 12px;
+  background: transparent; /* Lighter green background from card gradient */
+  flex-shrink: 0;
+}
+
+.dashboard-metric-card-breakdown-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  align-items: center;
+}
+
+.dashboard-metric-card-breakdown-value {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700; /* Bold for large rupee value */
+  font-size: 13px; /* Exact size */
+  line-height: 135%; /* Exact line height */
+  letter-spacing: 0%; /* Exact letter spacing */
+  color: #FFFFFF; /* Exact color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.25rem;
+}
+
+.dashboard-metric-card-breakdown-pill {
+  width: fit-content;
+  min-width: 30px;
+  height: 15px;
+  padding: 10px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #FFFFFF;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 135%;
+  letter-spacing: 0%;
+  color: #FFFFFF;
+  background: transparent;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.dashboard-metric-card-breakdown-percent {
+  width: 30px;
+  height: 13px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 135%;
+  letter-spacing: 0%;
+  color: #FFFFFF;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.8rem 1.8rem;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Dashboard sections */
+.superadmin-dashboard-section {
+  margin-bottom: 2rem;
+}
+
+.superadmin-dashboard-section:last-child {
+  margin-bottom: 0;
+}
+
+/* Dashboard grid - 4 columns - All cards equal size */
+.superadmin-dashboard-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+/* Ensure cards maintain exact width when possible */
+.superadmin-dashboard-cards-grid .dashboard-metric-card {
+  max-width: 282.62px; /* Exact width */
+  width: 100%;
+}
+
+/* Three cards grid - 2 metric (equal to top cards) + 1 chart (wider) */
+.superadmin-dashboard-three-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+/* Ensure last 2 metric cards are exactly equal to top row cards */
+.superadmin-dashboard-three-cards-grid .dashboard-metric-card {
+  height: 285.81px; /* Exact height */
+  max-width: 282.62px; /* Exact width */
+  width: 100%;
+  min-width: 0;
+}
+
+/* Status Distribution Card - Same height and width as metric cards */
+.dashboard-status-distribution-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  min-height: 280px;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.dashboard-status-distribution-header {
+  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+}
+
+.dashboard-status-distribution-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.25rem;
+}
+
+.dashboard-status-distribution-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.dashboard-status-distribution-content {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dashboard-status-distribution-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dashboard-status-distribution-chart {
+  flex: 0 0 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 240px;
+  height: 240px;
+  min-width: 240px;
+  max-width: 240px;
+  min-height: 240px;
+  max-height: 240px;
+  padding: 0;
+  box-sizing: border-box;
+  margin-left: auto;
+  overflow: visible;
+}
+
+.dashboard-status-distribution-chart-wrapper {
+  width: 240px;
+  height: 240px;
+  min-width: 240px;
+  min-height: 240px;
+  max-width: 240px;
+  max-height: 240px;
+  flex-shrink: 0;
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  aspect-ratio: 1 / 1;
+}
+
+.dashboard-status-distribution-donut-svg {
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.2));
+  width: 100%;
+  height: 100%;
+  display: block;
+  shape-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: transform 0.3s ease;
+}
+
+.dashboard-status-distribution-donut-svg:hover {
+  transform: scale(1.02);
+}
+
+.donut-segment {
+  transition: opacity 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+}
+
+.donut-segment:hover {
+  opacity: 0.9;
+  filter: brightness(1.1);
+}
+
+.dashboard-status-distribution-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+}
+
+.dashboard-status-distribution-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.dashboard-status-distribution-legend-item:last-child {
+  margin-bottom: 0;
+}
+
+.dashboard-status-distribution-legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.dashboard-status-distribution-legend-dot--completed {
+  background: #10b981;
+}
+
+.dashboard-status-distribution-legend-dot--pending {
+  background: #f59e0b;
+}
+
+.dashboard-status-distribution-legend-dot--cancelled {
+  background: #ef4444;
+}
+
+.dashboard-status-distribution-legend-label {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #374151;
+  font-weight: 600;
+}
+
+.dashboard-status-distribution-legend-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  min-width: 45px;
+  text-align: right;
+}
+
+/* Total Finances Card - Area Chart - Figma exact match */
+.dashboard-total-finances-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-total-finances-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-total-finances-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.dashboard-total-finances-year-wrap {
+  position: relative;
+}
+
+.dashboard-total-finances-year-trigger {
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 0.9rem;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dashboard-total-finances-year-icon {
+  font-size: 0.7rem;
+  color: #9ca3af;
+}
+
+.dashboard-total-finances-year-trigger:hover {
+  color: #374151;
+}
+
+.dashboard-total-finances-year-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  padding: 4px 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  min-width: 100px;
+  z-index: 10;
+}
+
+.dashboard-total-finances-year-option {
+  width: 100%;
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #374151;
+}
+
+.dashboard-total-finances-year-option:hover {
+  background: #f3f4f6;
+}
+
+.dashboard-total-finances-chart-container {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.dashboard-total-finances-y-axis {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 30px;
+  width: 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-right: 8px;
+  z-index: 1;
+}
+
+.dashboard-total-finances-y-label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-align: right;
+  line-height: 1;
+  height: calc(200px / 6);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.dashboard-total-finances-chart-wrap {
+  width: 100%;
+  height: 200px;
+  padding-left: 50px;
+  padding-right: 20px;
+  overflow-x: auto;
+  position: relative;
+}
+
+.dashboard-total-finances-chart {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.dashboard-total-finances-x-axis {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 50px;
+  padding-right: 20px;
+  margin-top: 8px;
+}
+
+.dashboard-total-finances-x-label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  flex: 1;
+  text-align: center;
+}
+
+.dashboard-total-finances-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.dashboard-total-finances-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dashboard-total-finances-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dashboard-total-finances-legend-dot--incomes {
+  background: #3b82f6;
+}
+
+.dashboard-total-finances-legend-dot--expenses {
+  background: #f97316;
+}
+
+.dashboard-total-finances-legend-label {
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+/* Tooltip */
+.dashboard-total-finances-tooltip {
+  position: absolute;
+  background: #1e3a8a;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  pointer-events: none;
+  z-index: 100;
+  transform: translateX(-50%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-total-finances-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #1e3a8a;
+}
+
+@media (max-width: 1200px) {
+  .superadmin-dashboard-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .superadmin-dashboard-three-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .superadmin-dashboard-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-status-distribution-content {
+    flex-direction: column;
+  }
+}
+
+/* Balance Card - Grouped Bar Chart */
+.dashboard-balance-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-balance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.dashboard-balance-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dashboard-balance-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.dashboard-balance-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background: #d1fae5;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #065f46;
+}
+
+.dashboard-balance-status-icon {
+  color: #10b981;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.dashboard-balance-status-text {
+  color: #065f46;
+}
+
+.dashboard-balance-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.dashboard-balance-legend {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.dashboard-balance-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dashboard-balance-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dashboard-balance-legend-dot--sanction {
+  background: #1e40af;
+}
+
+.dashboard-balance-legend-dot--collection {
+  background: #f59e0b;
+}
+
+.dashboard-balance-legend-label {
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.dashboard-balance-period-wrap {
+  position: relative;
+}
+
+.dashboard-balance-period-trigger {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #374151;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.dashboard-balance-period-trigger:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+.dashboard-balance-period-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+  opacity: 0.7;
+}
+
+.dashboard-balance-period-icon--open {
+  transform: rotate(180deg);
+}
+
+.dashboard-balance-period-trigger:hover .dashboard-balance-period-icon {
+  opacity: 1;
+}
+
+.dashboard-balance-period-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  padding: 4px 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  min-width: 120px;
+  z-index: 10;
+}
+
+.dashboard-balance-period-option {
+  width: 100%;
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #374151;
+  transition: background 0.2s ease;
+}
+
+.dashboard-balance-period-option:hover {
+  background: #f3f4f6;
+}
+
+.dashboard-balance-chart-container {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.dashboard-balance-y-axis {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 30px;
+  width: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-right: 8px;
+  z-index: 1;
+}
+
+.dashboard-balance-y-label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-align: right;
+  line-height: 1;
+  height: calc(280px / 4);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-weight: 500;
+}
+
+.dashboard-balance-chart-wrap {
+  width: 100%;
+  height: 280px;
+  padding-left: 60px;
+  padding-right: 0;
+  overflow-x: auto;
+  position: relative;
+  background: #fafafa;
+}
+
+.dashboard-balance-chart {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.dashboard-balance-x-axis {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 60px;
+  padding-right: 0;
+  margin-top: 8px;
+}
+
+.dashboard-balance-x-label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  flex: 1;
+  text-align: center;
+  font-weight: 500;
+}
+
+.dashboard-balance-bar {
+  transition: opacity 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+}
+
+.dashboard-balance-bar:hover {
+  opacity: 0.85;
+  filter: brightness(1.1);
+}
+
+.dashboard-balance-bar--sanction {
+  filter: drop-shadow(0 2px 4px rgba(28, 13, 123, 0.3));
+}
+
+.dashboard-balance-bar--collection {
+  filter: drop-shadow(0 2px 4px rgba(100, 207, 246, 0.3));
+}
+
+@media (max-width: 768px) {
+  .dashboard-balance-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard-balance-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Clickable card */
+.dashboard-metric-card--clickable {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-metric-card--clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Disbursed Leads Reloan Page */
+.disbursed-leads-reloan-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.disbursed-leads-reloan-header-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.disbursed-leads-reloan-header {
+  background: #1f2937;
+  border-radius: 50px;
+  padding: 10px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.disbursed-leads-reloan-header-icon {
+  width: 18px;
+  height: 18px;
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.disbursed-leads-reloan-header span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.4;
+}
+
+.disbursed-leads-reloan-filters-card {
+  background: #FFFFFF;
+  border-radius: 8px;
+  padding: 16px 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  margin-bottom: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.disbursed-leads-reloan-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.disbursed-leads-reloan-search-wrap {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.disbursed-leads-reloan-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #9ca3af;
+  z-index: 1;
+}
+
+.disbursed-leads-reloan-search {
+  width: 100%;
+  padding: 12px 16px 12px 40px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #374151;
+  background: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+.disbursed-leads-reloan-search::placeholder {
+  color: #9ca3af;
+}
+
+.disbursed-leads-reloan-search:focus {
+  outline: none;
+  border-color: #065f46;
+}
+
+.disbursed-leads-reloan-sort-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.disbursed-leads-reloan-sort-label {
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+}
+
+.disbursed-leads-reloan-sort-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #FFFFFF;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+.disbursed-leads-reloan-sort-trigger:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+.disbursed-leads-reloan-sort-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+}
+
+.disbursed-leads-reloan-table-wrap {
+  background: #FFFFFF;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+  border: 1px solid #e5e7eb;
+}
+
+.disbursed-leads-reloan-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.disbursed-leads-reloan-table thead {
+  background: #f9fafb;
+}
+
+.disbursed-leads-reloan-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e5e7eb;
+  font-family: 'Inter', sans-serif;
+}
+
+.disbursed-leads-reloan-table td {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  font-family: 'Inter', sans-serif;
+}
+
+.disbursed-leads-reloan-table-cell-bold {
+  font-weight: 600;
+}
+
+.disbursed-leads-reloan-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.disbursed-leads-reloan-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.disbursed-leads-reloan-reloan-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #60a5fa;
+  color: white;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  margin-left: 6px;
+  line-height: 1.4;
+}
+
+.disbursed-leads-reloan-assignee {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.disbursed-leads-reloan-assignee-name {
+  font-weight: 600;
+}
+
+.disbursed-leads-reloan-assignee-id {
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: 'Inter', sans-serif;
+}
+
+.disbursed-leads-reloan-details-btn {
+  padding: 8px 16px;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+
+.disbursed-leads-reloan-details-btn:hover {
+  background: #e5e7eb;
+}
