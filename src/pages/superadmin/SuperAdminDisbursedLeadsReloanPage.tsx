@@ -144,7 +144,7 @@ export function SuperAdminDisbursedLeadsReloanPage() {
               leads.map((lead, i) => (
                 <tr key={i}>
                   <td className="disbursed-leads-reloan-table-cell-bold">{lead.leadId}</td>
-                  <td className="disbursed-leloan-table-cell-bold">{lead.fullName}</td>
+                  <td className="disbursed-leads-reloan-table-cell-bold">{lead.fullName}</td>
                   <td>{lead.mobile}</td>
                   <td>{lead.pan}</td>
                   <td className="disbursed-leads-reloan-table-cell-bold">{lead.loanAmount}</td>
