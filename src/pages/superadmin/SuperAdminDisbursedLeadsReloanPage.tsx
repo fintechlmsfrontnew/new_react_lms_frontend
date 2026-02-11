@@ -43,7 +43,6 @@ export function SuperAdminDisbursedLeadsReloanPage() {
         const data = await response.json();
         setLeads(data.leads || data || []);
       } else {
-        // Fallback to sample data if API fails
         const sampleLead: Lead = {
           leadId: 7180,
           fullName: "Vedanaparthi Sivakumar",
@@ -60,7 +59,6 @@ export function SuperAdminDisbursedLeadsReloanPage() {
       }
     } catch (error) {
       console.error("Error fetching leads:", error);
-      // Fallback to sample data on error
       const sampleLead: Lead = {
         leadId: 7180,
         fullName: "Vedanaparthi Sivakumar",
@@ -144,31 +142,31 @@ export function SuperAdminDisbursedLeadsReloanPage() {
               </tr>
             ) : (
               leads.map((lead, i) => (
-              <tr key={i}>
-                <td className="disbursed-leads-reloan-table-cell-bold">{lead.leadId}</td>
-                <td className="disbursed-leads-reloan-table-cell-bold">{lead.fullName}</td>
-                <td>{lead.mobile}</td>
-                <td>{lead.pan}</td>
-                <td className="disbursed-leads-reloan-table-cell-bold">{lead.loanAmount}</td>
-                <td>
-                  <span className="disbursed-leads-reloan-status">
-                    {lead.status}
-                    {lead.isReloan && (
-                      <span className="disbursed-leads-reloan-reloan-badge">(Reloan)</span>
-                    )}
-                  </span>
-                </td>
-                <td>
-                  <div className="disbursed-leads-reloan-assignee">
-                    <span className="disbursed-leads-reloan-assignee-name">{lead.assignee}</span>
-                    <span className="disbursed-leads-reloan-assignee-id">ID:{lead.assigneeId}</span>
-                  </div>
-                </td>
-                <td className="disbursed-leads-reloan-table-cell-bold">{lead.source}</td>
-                <td>
-                  <button className="disbursed-leads-reloan-details-btn">Details</button>
-                </td>
-              </tr>
+                <tr key={i}>
+                  <td className="disbursed-leads-reloan-table-cell-bold">{lead.leadId}</td>
+                  <td className="disbursed-leloan-table-cell-bold">{lead.fullName}</td>
+                  <td>{lead.mobile}</td>
+                  <td>{lead.pan}</td>
+                  <td className="disbursed-leads-reloan-table-cell-bold">{lead.loanAmount}</td>
+                  <td>
+                    <span className="disbursed-leads-reloan-status">
+                      {lead.status}
+                      {lead.isReloan && (
+                        <span className="disbursed-leads-reloan-reloan-badge">(Reloan)</span>
+                      )}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="disbursed-leads-reloan-assignee">
+                      <span className="disbursed-leads-reloan-assignee-name">{lead.assignee}</span>
+                      <span className="disbursed-leads-reloan-assignee-id">ID:{lead.assigneeId}</span>
+                    </div>
+                  </td>
+                  <td className="disbursed-leads-reloan-table-cell-bold">{lead.source}</td>
+                  <td>
+                    <button className="disbursed-leads-reloan-details-btn">Details</button>
+                  </td>
+                </tr>
               ))
             )}
           </tbody>
