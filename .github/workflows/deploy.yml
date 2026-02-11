@@ -26,9 +26,10 @@ jobs:
 
       - name: Upload build to cPanel via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: build/
-          server-dir: /public_html/
+       with:
+  server: ${{ secrets.FTP_HOST }}
+  username: ${{ secrets.FTP_USERNAME }}
+  password: ${{ secrets.FTP_PASSWORD }}
+  local-dir: build/
+  server-dir: ${{ secrets.FTP_TARGET }}
+
