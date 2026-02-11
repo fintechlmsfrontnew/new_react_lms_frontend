@@ -3,7 +3,7 @@ name: Deploy Frontend to cPanel
 on:
   push:
     branches:
-      - main   # sirf main se deploy hoga (safe practice)
+      - main
 
 jobs:
   deploy:
@@ -31,5 +31,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: dist/
-          server-dir: /public_html/
+          server-dir: ./
           dangerous-clean-slate: true
