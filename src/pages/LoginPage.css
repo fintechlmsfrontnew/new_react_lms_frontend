@@ -117,13 +117,17 @@
     text-align: left;
   }
   
+  .login-input-wrapper {
+    margin-bottom: 1.25rem;
+  }
+
   .login-input {
     width: 100%;
     padding: 12px 16px;
     border: 1px solid #d1d5db;
     border-radius: 50px;
     font-size: 1rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0;
     outline: none;
     background-color: #f0f9ff;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
@@ -137,6 +141,21 @@
     border-color: #065f46;
     box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.15);
   }
+
+  /* Error state for input */
+  .login-input-error {
+    border-color: #dc2626 !important;
+    background-color: #fef2f2 !important;
+  }
+
+  .login-input-error:hover {
+    border-color: #dc2626 !important;
+  }
+
+  .login-input-error:focus {
+    border-color: #dc2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
+  }
   
   .login-password-wrap {
     position: relative;
@@ -146,6 +165,52 @@
   .login-password-wrap .login-input {
     margin-bottom: 0;
     padding-right: 44px;
+  }
+
+  /* Error Message below inputs */
+  .login-field-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 0 16px;
+    color: #dc2626;
+    font-size: 0.875rem;
+    font-weight: 500;
+    animation: fadeInUp 0.3s ease-out;
+  }
+
+  .login-error-icon {
+    font-size: 1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .login-error-text {
+    line-height: 1.4;
+  }
+
+  /* Success Message */
+  .login-success-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1.25rem;
+    padding: 12px 16px;
+    background-color: #d1fae5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    animation: fadeInUp 0.3s ease-out;
+  }
+
+  .login-success-icon {
+    font-size: 1.1rem;
+    font-weight: 700;
+    flex-shrink: 0;
   }
   
   .login-eye {
@@ -206,3 +271,11 @@
     transform: translateY(0);
     box-shadow: 0 2px 6px rgba(6, 95, 70, 0.25);
   }
+
+  .login-btn:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+

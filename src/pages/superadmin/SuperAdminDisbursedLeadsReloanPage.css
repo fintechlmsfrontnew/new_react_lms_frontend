@@ -1,0 +1,444 @@
+.disbursed-leads-page {
+  background: #e9eaee;
+  min-height: 100vh;
+  padding: 20px 20px;
+  font-family: 'Inter', sans-serif;
+  overflow-x: auto;
+  overflow-y: visible;
+  width: 100%;
+}
+
+/* Custom Scrollbar */
+.disbursed-leads-page::-webkit-scrollbar {
+  height: 8px;
+}
+
+.disbursed-leads-page::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.disbursed-leads-page::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.disbursed-leads-page::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.disbursed-leads-wrapper {
+  min-width: 1278px;
+  width: 1278px;
+  position: relative;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+/* HEADER & SVG LOGIC */
+.disbursed-leads-header-container {
+  position: relative;
+  height: 286px;
+  width: 100%;
+  min-width: 1278px;
+  margin-bottom: 0;
+  padding: 0;
+  padding-bottom: 0;
+  box-sizing: border-box;
+}
+
+.disbursed-leads-svg-bg {
+  position: absolute;
+  top: 0;
+  left: -50px;
+  width: calc(100% + 250px);
+  height: 100%;
+  z-index: 1;
+  filter: drop-shadow(0px 10px 60px rgba(226, 236, 249, 0.5));
+  margin: 0;
+  padding: 0;
+}
+
+.disbursed-leads-overlay {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 65px 50px 0 70px;
+  margin-left: -50px; /* Align with curved background start */
+  margin-right: -50px; /* Extend to match SVG right edge */
+  width: calc(100% + 175px);
+  box-sizing: border-box;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 280px;
+}
+
+.user-icon-circle {
+  font-size: 24px;
+  background: #f3f4f6;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #10b981;
+  margin-left: 10px;
+}
+
+.header-left h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  gap: 15px;
+  margin-left: 30px;
+}
+
+.search-box {
+  background: #eceef2;
+  border-radius: 12px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 290px;
+}
+
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+}
+
+.sort-box {
+  background: #eceef2;
+  border-radius: 12px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+/* TABLE HEADERS - same padding as rows for exact column alignment */
+.disbursed-leads-table-headers {
+  position: relative;
+  z-index: 10;
+  margin-top: 55px;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  padding: 0 89px 0 19px;
+  padding-bottom: 0;
+  display: grid;
+  grid-template-columns: 90px 160px 110px 120px 120px 180px 170px 130px 160px;
+  gap: 16px;
+  width: 100%;
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-sizing: border-box;
+  align-items: start;
+  line-height: 1;
+  height: auto;
+  vertical-align: bottom;
+}
+
+.disbursed-leads-table-headers > div {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+/* Ensure first column (LEAD ID) aligns properly with left padding */
+.disbursed-leads-table-headers > div:first-child {
+  justify-content: flex-start;
+  padding-left: 18px;
+}
+
+.disbursed-leads-table-headers > div:nth-child(8) {
+  /* SOURCE column - center align */
+  justify-content: center;
+}
+
+.disbursed-leads-table-headers > div:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  padding-right: 40px;
+  padding-left: 0;
+  box-sizing: border-box;
+}
+
+/* ROWS LOGIC - same margin-left as headers so text stays under titles */
+.disbursed-leads-rows-container {
+  margin-top: -70px;
+  margin-left: 0;
+  padding: 0 89px 0 19px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  z-index: 20;
+  border-radius: 15px;
+  overflow: visible;
+  width: calc(100% + 250px);
+  margin-bottom: 0;
+  box-sizing: border-box;
+}
+
+.disbursed-leads-rows-container > * {
+  margin: 0;
+  padding: 0;
+}
+
+.lead-row-card {
+  background: #E2E2E2;
+  display: grid;
+  grid-template-columns: 90px 160px 110px 120px 120px 180px 170px 130px 160px;
+  gap: 16px;
+  padding: 20px 0;
+  min-height: 77px;
+  height: 77px;
+  width: 100%;
+  box-sizing: border-box;
+  vertical-align: top;
+  border-radius: 15px;
+  margin-left: 0;
+  align-items: start;
+  overflow: visible;
+}
+
+.lead-row-card:first-child {
+  margin-top: 0;
+  padding-top: 20px;
+  margin-bottom: 0;
+}
+
+.lead-row-card:last-child {
+}
+
+.lead-row-card.zebra-row {
+  background: #F7F7F7;
+}
+
+.lead-row-card > div:nth-child(8) {
+  /* SOURCE column - center align */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Override .cell class for SOURCE column to ensure center alignment */
+.lead-row-card > div:nth-child(8).cell {
+  justify-content: center !important;
+}
+
+/* Ensure .source-text inside SOURCE column is centered */
+.lead-row-card > div:nth-child(8) .source-text {
+  justify-content: center;
+  width: 100%;
+}
+
+.lead-row-card > div:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  padding-right: 40px;
+  padding-left: 0;
+  margin-top: 0;
+  box-sizing: border-box;
+}
+
+/* Override .cell class for ACTION column to ensure right alignment */
+.lead-row-card > div:last-child.cell {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  width: 100% !important;
+  padding-right: 25px !important;
+  padding-left: 0 !important;
+}
+
+/* Ensure Details button is right-aligned */
+.lead-row-card > div:last-child .details-btn {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* CELL CONTENT */
+.cell-bold {
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  min-width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 0;
+  padding-right: 0;
+  margin-top: 13px;
+  box-sizing: border-box;
+}
+
+/* Ensure LEAD ID (first column) aligns with header - add left padding */
+.lead-row-card > div:first-child.cell-bold {
+  justify-content: flex-start;
+  padding-left: 18px;
+}
+
+.cell-bold.full-name-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  white-space: normal;
+  line-height: 1.4;
+  gap: 2px;
+  padding-left: 0;
+  padding-right: 0;
+  margin-top: 0;
+  justify-content: flex-start;
+}
+
+.full-name-cell .first-name {
+  display: block;
+}
+
+.full-name-cell .surname {
+  display: block;
+}
+
+.cell {
+  color: #4b5563;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  min-width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 0;
+  padding-right: 0;
+  margin-top: 13px;
+  box-sizing: border-box;
+}
+
+.source-text {
+  color: #4b5563;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  min-width: fit-content;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.assignee-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  min-width: fit-content;
+  padding-left: 0;
+  padding-right: 0;
+  box-sizing: border-box;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.assignee-cell .name {
+  font-weight: 500;
+  color: #1a1a1a;
+  font-size: 14px;
+}
+
+.assignee-cell .id {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.status-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  min-width: fit-content;
+  padding-left: 0;
+  padding-right: 0;
+  box-sizing: border-box;
+}
+
+.reloan-tag {
+  background: #10b981;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.details-btn {
+  background: #6366f1;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  min-width: fit-content;
+  margin-top: 5px;
+  transition: background 0.2s ease;
+}
+
+.details-btn:hover {
+  background: #4f46e5;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+  font-size: 16px;
+}

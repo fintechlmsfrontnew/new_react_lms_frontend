@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom"
 import { LoginPage } from "./pages/LoginPage"
+import { ProtectedRoute } from "./components/ProtectedRoute"
 import { SuperAdminLayout } from "./components/superadmin/SuperAdminLayout"
 import { SuperAdminDashboardPage } from "./pages/superadmin/SuperAdminDashboardPage"
 import { SuperAdminActionPlanPage } from "./pages/superadmin/SuperAdminActionPlanPage"
@@ -10,7 +11,14 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/dashboard" element={<SuperAdminLayout />}>
+      <Route 
+        path="/dashboard" 
+        element={
+          <ProtectedRoute>
+            <SuperAdminLayout />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<SuperAdminDashboardPage />} />
         <Route path="action-plan" element={<SuperAdminActionPlanPage />} />
         <Route path="add-employee" element={<SuperAdminAddEmployeePage />} />
