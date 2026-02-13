@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import * as faceapi from "face-api.js"
 import Webcam from "react-webcam"
+import { logger } from "../utils/logger"
 import "./FaceVerification.css"
 
 interface FaceVerificationProps {
@@ -52,7 +53,7 @@ export function FaceVerification({
           setModelsLoaded(true)
           return
         } catch (cdnError) {
-          console.log("CDN models failed, trying local models...")
+          logger.log("CDN models failed, trying local models...")
         }
 
         // Fallback to local models
@@ -65,7 +66,7 @@ export function FaceVerification({
         
         setModelsLoaded(true)
       } catch (err: any) {
-        console.error("Error loading models:", err)
+        logger.error("Error loading models:", err)
         setError(`Models not found. Using basic camera mode.`)
         // Allow camera to open even without models (basic capture only)
         setTimeout(() => {
@@ -122,7 +123,7 @@ export function FaceVerification({
         }
       } catch (err) {
         // If face detection fails, allow basic capture
-        console.log("Face detection error (using basic mode):", err)
+        logger.log("Face detection error (using basic mode):", err)
         setFaceDetected(true) // Allow capture even without detection
       }
     }
@@ -176,7 +177,7 @@ export function FaceVerification({
           // Strict threshold to ensure only registered user can login
           const isMatch = distance < 0.5
           
-          console.log("Face Verification:", {
+          logger.log("Face Verification:", {
             distance: distance.toFixed(4),
             threshold: 0.5,
             isMatch: isMatch,
@@ -204,7 +205,7 @@ export function FaceVerification({
 
           // Face matches - proceed (isVerified = true)
           isVerified = true
-          console.log("Face verification PASSED - proceeding with capture")
+          logger.log("Face verification PASSED - proceeding with capture")
         } else {
           // No stored face - first time registration
           // Allow capture without verification
@@ -221,7 +222,7 @@ export function FaceVerification({
           }
           return
         }
-        console.log("Face detection skipped, using basic capture (first time registration only)")
+        logger.log("Face detection skipped, using basic capture (first time registration only)")
         // Only allow basic mode if NO stored face exists (first time registration)
         isVerified = true
       }
@@ -243,7 +244,7 @@ export function FaceVerification({
         // Parent will close modal after successful login
       }
     } catch (err: any) {
-      console.error("Error capturing face:", err)
+      logger.error("Error capturing face:", err)
       setError(err.message || "Failed to capture image. Please try again.")
     } finally {
       setCapturing(false)
@@ -340,7 +341,7 @@ export function FaceVerification({
               <button
                 className="skip-btn"
                 onClick={() => {
-                  console.log("Skipping face verification - this will clear stored face")
+                  logger.log("Skipping face verification - this will clear stored face")
                   // Clear stored face and proceed without verification
                   if (onVerify) {
                     onVerify(true) // Allow login without verification
