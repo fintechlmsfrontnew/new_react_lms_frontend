@@ -1,4 +1,5 @@
 import API_BASE_URL from "../config/api"
+import { logger } from "../utils/logger"
 
 /**
  * Login User Function
@@ -45,8 +46,8 @@ export const loginUser = async (email: string, password: string) => {
 
     // Get response text first to handle both JSON and non-JSON responses
     const responseText = await response.text()
-    console.log("Raw API Response:", responseText)
-    console.log("Response Headers:", Object.fromEntries(response.headers.entries()))
+    logger.log("Raw API Response:", responseText)
+    logger.log("Response Headers:", Object.fromEntries(response.headers.entries()))
 
     let data: any = {}
     
@@ -91,8 +92,8 @@ export const loginUser = async (email: string, password: string) => {
       message: data.message || data.msg || data.error || "Invalid email or password. Please check your credentials and try again."
     }
   } catch (error: any) {
-    console.error("Login API error:", error)
-    console.error("Error details:", {
+    logger.error("Login API error:", error)
+    logger.error("Error details:", {
       message: error.message,
       stack: error.stack,
       name: error.name

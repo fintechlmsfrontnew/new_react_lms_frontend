@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { loginUser } from "../services/authService"
 import { FaceVerification } from "../components/FaceVerification"
 import { getStoredFaceDescriptor, storeFaceDescriptor, clearFaceDescriptor } from "../utils/faceStorage"
+import { logger } from "../utils/logger"
 import "./LoginPage.css"
 
 export function LoginPage() {
@@ -22,10 +23,10 @@ export function LoginPage() {
   useEffect(() => {
     if (email) {
       const stored = getStoredFaceDescriptor(email)
-      console.log("Loading stored face descriptor for email:", email.toLowerCase())
-      console.log("Stored face descriptor found:", !!stored)
+      logger.log("Loading stored face descriptor for email:", email.toLowerCase())
+      logger.log("Stored face descriptor found:", !!stored)
       if (stored) {
-        console.log("Stored descriptor length:", stored.length)
+        logger.log("Stored descriptor length:", stored.length)
       }
       setStoredFaceDescriptor(stored)
     }
@@ -51,8 +52,8 @@ export function LoginPage() {
       return
     }
 
-    console.log("Login form submitted, opening face verification...")
-    console.log("Stored face descriptor exists:", !!storedFaceDescriptor)
+    logger.log("Login form submitted, opening face verification...")
+    logger.log("Stored face descriptor exists:", !!storedFaceDescriptor)
     
     // Open face verification modal first
     setPendingLogin(true)
@@ -61,18 +62,18 @@ export function LoginPage() {
 
   // Handle actual login after face verification
   const performLogin = async () => {
-    console.log("performLogin called - Starting login API call...")
+    logger.log("performLogin called - Starting login API call...")
     setLoading(true)
     setError("")
 
     try {
       // Real API call using authService
-      console.log("Calling loginUser API with email:", email)
+      logger.log("Calling loginUser API with email:", email)
       const result = await loginUser(email, password)
-      console.log("Login API response:", result)
+      logger.log("Login API response:", result)
 
       if (result.success && result.token) {
-        console.log("Login successful! Token received.")
+        logger.log("Login successful! Token received.")
         // Store token in localStorage
         localStorage.setItem("authToken", result.token)
         
@@ -86,17 +87,17 @@ export function LoginPage() {
         
         // Navigate to dashboard after 1.5 seconds
         setTimeout(() => {
-          console.log("Navigating to dashboard...")
+          logger.log("Navigating to dashboard...")
           navigate("/dashboard")
         }, 1500)
       } else {
-        console.error("Login failed:", result.message)
+        logger.error("Login failed:", result.message)
         // Show error message below input fields
         setError(result.message || "Invalid email or password. Please try again.")
         setLoading(false)
       }
     } catch (error: any) {
-      console.error("Login error:", error)
+      logger.error("Login error:", error)
       setError(error.message || "An error occurred during login. Please try again.")
       setLoading(false)
     }
@@ -174,7 +175,7 @@ export function LoginPage() {
                     clearFaceDescriptor(email)
                     setStoredFaceDescriptor(null)
                     setError("Stored face cleared. Please try logging in again to register a new face.")
-                    console.log("Stored face cleared for:", email)
+                    logger.log("Stored face cleared for:", email)
                   }}
                   style={{
                     marginTop: "8px",
@@ -209,33 +210,33 @@ export function LoginPage() {
           storedFaceDescriptor={storedFaceDescriptor}
           requireVerification={!!storedFaceDescriptor} // Require verification if stored face exists
           onFaceCaptured={(imageData, faceDescriptor) => {
-            console.log("onFaceCaptured called - Image captured, descriptor:", !!faceDescriptor)
-            console.log("Stored face descriptor exists:", !!storedFaceDescriptor)
+            logger.log("onFaceCaptured called - Image captured, descriptor:", !!faceDescriptor)
+            logger.log("Stored face descriptor exists:", !!storedFaceDescriptor)
             setCapturedFaceImage(imageData)
             
             // IMPORTANT: If stored face exists, DO NOT proceed with login here
             // Wait for onVerify callback to confirm face matches
             if (storedFaceDescriptor) {
-              console.log("Stored face exists - MUST wait for onVerify callback. DO NOT login here.")
+              logger.log("Stored face exists - MUST wait for onVerify callback. DO NOT login here.")
               return // Don't proceed - wait for onVerify
             }
             
             // Only proceed if NO stored face exists (first time registration)
             if (faceDescriptor && !storedFaceDescriptor) {
-              console.log("First time registration - storing face descriptor for:", email.toLowerCase())
+              logger.log("First time registration - storing face descriptor for:", email.toLowerCase())
               const stored = storeFaceDescriptor(email, faceDescriptor)
-              console.log("Face descriptor stored successfully:", stored)
+              logger.log("Face descriptor stored successfully:", stored)
               
               // First time registration - proceed with login
               if (pendingLogin) {
-                console.log("First time registration - proceeding with login")
+                logger.log("First time registration - proceeding with login")
                 setShowFaceVerification(false)
                 performLogin()
                 setPendingLogin(false)
               }
             } else if (!faceDescriptor && !storedFaceDescriptor) {
               // No face descriptor and no stored face - basic mode (models not loaded)
-              console.log("Basic mode - no face descriptor, no stored face")
+              logger.log("Basic mode - no face descriptor, no stored face")
               if (pendingLogin) {
                 setShowFaceVerification(false)
                 performLogin()
@@ -244,12 +245,12 @@ export function LoginPage() {
             }
           }}
           onVerify={(isVerified) => {
-            console.log("onVerify called - isVerified:", isVerified)
-            console.log("Stored face descriptor exists:", !!storedFaceDescriptor)
+            logger.log("onVerify called - isVerified:", isVerified)
+            logger.log("Stored face descriptor exists:", !!storedFaceDescriptor)
             
             if (isVerified) {
               // Face verified successfully - ONLY way to login when stored face exists
-              console.log("Face verified successfully - proceeding with login")
+              logger.log("Face verified successfully - proceeding with login")
               setShowFaceVerification(false)
               if (pendingLogin) {
                 performLogin()
@@ -257,7 +258,7 @@ export function LoginPage() {
               }
             } else {
               // Face verification failed - REJECT login
-              console.log("Face verification FAILED - REJECTING login")
+              logger.log("Face verification FAILED - REJECTING login")
               setError("Face verification failed. Your face does not match the registered face. Only the registered user can login. Click 'Clear Stored Face' to register a new face.")
               setShowFaceVerification(false)
               setPendingLogin(false)
