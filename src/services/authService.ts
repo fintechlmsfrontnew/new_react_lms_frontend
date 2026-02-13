@@ -55,14 +55,14 @@ export const loginUser = async (email: string, password: string) => {
     try {
       data = JSON.parse(responseText)
     } catch (parseError) {
-      console.error("Failed to parse response as JSON:", parseError)
+      logger.error("Failed to parse response as JSON:", parseError)
       return {
         success: false,
         message: `Server returned an invalid response: ${responseText.substring(0, 100)}`
       }
     }
-    console.log("API Response Status:", response.status)
-    console.log("API Response Data:", data)
+    logger.log("API Response Status:", response.status)
+    logger.log("API Response Data:", data)
 
     // Check multiple possible success conditions
     // Swagger might return status: true OR response.ok with token
