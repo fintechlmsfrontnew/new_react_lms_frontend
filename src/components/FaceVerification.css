@@ -97,14 +97,21 @@
   top: 1rem;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(16, 185, 129, 0.9);
+  background: rgba(16, 185, 129, 0.95);
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.25rem;
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 600;
   z-index: 10;
   animation: pulse 2s infinite;
+  white-space: nowrap;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+  word-wrap: break-word;
+  white-space: normal;
+  line-height: 1.4;
 }
 
 .face-error-message {
@@ -159,44 +166,65 @@
   display: flex;
   gap: 1rem;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .capture-btn,
 .cancel-btn {
-  padding: 12px 24px;
+  padding: 14px 28px;
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;
+  min-width: 140px;
 }
 
 .capture-btn {
   background-color: #065f46;
   color: white;
   flex: 1;
+  max-width: 200px;
 }
 
 .capture-btn:hover:not(:disabled) {
   background-color: #047857;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 95, 70, 0.3);
 }
 
 .capture-btn:disabled {
   background-color: #9ca3af;
   cursor: not-allowed;
   transform: none;
+  opacity: 0.6;
 }
 
 .cancel-btn {
   background-color: #f3f4f6;
   color: #4b5563;
   flex: 1;
+  max-width: 200px;
 }
 
 .cancel-btn:hover {
   background-color: #e5e7eb;
+  transform: translateY(-2px);
+}
+
+/* Responsive buttons */
+@media (max-width: 480px) {
+  .face-verification-actions {
+    flex-direction: column;
+  }
+
+  .capture-btn,
+  .cancel-btn {
+    width: 100%;
+    max-width: 100%;
+    min-width: auto;
+  }
 }
 
 .loading-spinner {
@@ -235,6 +263,17 @@
   }
   50% {
     opacity: 0.7;
+  }
+}
+
+@keyframes gentlePulse {
+  0%, 100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: translateX(-50%) scale(1.02);
   }
 }
 
