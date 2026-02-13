@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Outlet } from "react-router-dom"
 import { SuperAdminHeader } from "./SuperAdminHeader"
 import { SuperAdminSidebar } from "./SuperAdminSidebar"
@@ -8,11 +9,20 @@ import "./SuperAdminLayout.css"
  * Login ke baad yahi layout dikhega.
  */
 export function SuperAdminLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+
+  const handleToggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen)
+  }
+
   return (
     <div className="superadmin-layout">
       <SuperAdminSidebar />
       <div className="superadmin-main-wrap">
-        <SuperAdminHeader />
+        <SuperAdminHeader 
+          onToggleSidebar={handleToggleSidebar}
+          sidebarOpen={sidebarOpen}
+        />
         <main className="superadmin-main-content">
           <Outlet />
         </main>
