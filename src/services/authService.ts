@@ -43,31 +43,60 @@ export const loginUser = async (email: string, password: string) => {
       })
     })
 
-    // Check if response is JSON
-    const contentType = response.headers.get("content-type")
-    if (!contentType || !contentType.includes("application/json")) {
+    // Get response text first to handle both JSON and non-JSON responses
+    const responseText = await response.text()
+    console.log("Raw API Response:", responseText)
+    console.log("Response Headers:", Object.fromEntries(response.headers.entries()))
+
+    let data: any = {}
+    
+    // Try to parse as JSON
+    try {
+      data = JSON.parse(responseText)
+    } catch (parseError) {
+      console.error("Failed to parse response as JSON:", parseError)
       return {
         success: false,
-        message: "Server returned an invalid response. Please try again."
+        message: `Server returned an invalid response: ${responseText.substring(0, 100)}`
       }
     }
+    console.log("API Response Status:", response.status)
+    console.log("API Response Data:", data)
 
-    const data = await response.json()
-
-    if (response.ok && data.status === true) {
-      return {
-        success: true,
-        message: data.message || "Login successful",
-        token: data.token
+    // Check multiple possible success conditions
+    // Swagger might return status: true OR response.ok with token
+    if (response.ok) {
+      // Check if token exists (could be in data.token or data.data.token)
+      const token = data.token || data.data?.token || data.access_token
+      
+      if (token) {
+        return {
+          success: true,
+          message: data.message || data.msg || "Login successful",
+          token: token
+        }
+      } else if (data.status === true || data.success === true) {
+        // Some APIs return status: true but token might be in different field
+        return {
+          success: true,
+          message: data.message || data.msg || "Login successful",
+          token: token || data.data?.token || ""
+        }
       }
-    } else {
-      return {
-        success: false,
-        message: data.message || "Login failed"
-      }
+    }
+    
+    // If we reach here, login failed
+    return {
+      success: false,
+      message: data.message || data.msg || data.error || "Invalid email or password. Please check your credentials and try again."
     }
   } catch (error: any) {
     console.error("Login API error:", error)
+    console.error("Error details:", {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    })
     return {
       success: false,
       message: error.message || "Network error. Please check your connection and try again."

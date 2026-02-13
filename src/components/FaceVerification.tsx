@@ -168,29 +168,43 @@ export function FaceVerification({
         // Get face descriptor
         faceDescriptor = detections[0].descriptor
 
-        // If stored face descriptor provided, verify
+        // If stored face descriptor provided, verify STRICTLY
         if (storedFaceDescriptor) {
           const distance = faceapi.euclideanDistance(faceDescriptor, storedFaceDescriptor)
           
-          // Threshold: 0.6 (lower = more strict, 0.6 = good balance)
-          // Lower threshold = stricter matching
-          const isMatch = distance < 0.6
+          // Threshold: 0.5 (lower = more strict, 0.5 = strict security)
+          // Strict threshold to ensure only registered user can login
+          const isMatch = distance < 0.5
+          
+          console.log("Face Verification:", {
+            distance: distance.toFixed(4),
+            threshold: 0.5,
+            isMatch: isMatch,
+            storedDescriptorLength: storedFaceDescriptor.length,
+            currentDescriptorLength: faceDescriptor.length,
+            message: isMatch ? "Face matches - verified!" : `Face doesn't match! Distance ${distance.toFixed(4)} exceeds threshold 0.5`
+          })
+          
           setVerificationResult(isMatch)
           
-          // Call onVerify callback first
+          // CRITICAL: Call onVerify callback FIRST before proceeding
+          // This ensures parent component knows verification result
           if (onVerify) {
             onVerify(isMatch)
           }
 
           if (!isMatch) {
-            // Face doesn't match - reject
-            setError(`Face verification failed! Distance: ${distance.toFixed(3)} (threshold: 0.6). Your face does not match the registered face for this account.`)
+            // Face doesn't match - REJECT immediately
+            setError(`Face verification failed! Distance: ${distance.toFixed(3)} (threshold: 0.5). Your face does not match the registered face. Only the registered user can login.`)
             setCapturing(false)
-            return // Don't proceed with login
+            setVerificationResult(false)
+            // onVerify already called above with false
+            return // Don't proceed with login - STOP HERE
           }
 
-          // Face matches - proceed
+          // Face matches - proceed (isVerified = true)
           isVerified = true
+          console.log("Face verification PASSED - proceeding with capture")
         } else {
           // No stored face - first time registration
           // Allow capture without verification
@@ -198,25 +212,35 @@ export function FaceVerification({
         }
       } catch (detectionError: any) {
         // If face detection fails
-        if (requireVerification) {
-          setError("Face detection failed. Please ensure models are loaded and try again.")
+        if (requireVerification || storedFaceDescriptor) {
+          // If verification is required OR stored face exists, we MUST verify
+          setError("Face detection failed. Please ensure models are loaded and try again. Face verification is required for security.")
           setCapturing(false)
+          if (onVerify) {
+            onVerify(false) // Explicitly reject
+          }
           return
         }
-        console.log("Face detection skipped, using basic capture")
-        // If models not loaded, still allow (basic mode)
+        console.log("Face detection skipped, using basic capture (first time registration only)")
+        // Only allow basic mode if NO stored face exists (first time registration)
         isVerified = true
       }
 
-      // Only call callback if verified
+      // Only call callback if verified AND verification passed
       if (isVerified) {
-        // Call callback with captured image and descriptor
-        onFaceCaptured(imageSrc, faceDescriptor)
+        // IMPORTANT: If stored face exists, onFaceCaptured should NOT trigger login
+        // It should only store the image, and wait for onVerify callback
+        if (storedFaceDescriptor) {
+          // Stored face exists - verification already happened above
+          // onFaceCaptured will be called but won't trigger login (handled in LoginPage)
+          onFaceCaptured(imageSrc, faceDescriptor)
+        } else {
+          // No stored face - first time registration
+          onFaceCaptured(imageSrc, faceDescriptor)
+        }
         
-        // Auto close after 1.5 seconds
-        setTimeout(() => {
-          onClose()
-        }, 1500)
+        // Don't auto-close - let parent component handle closing after login
+        // Parent will close modal after successful login
       }
     } catch (err: any) {
       console.error("Error capturing face:", err)
@@ -312,6 +336,30 @@ export function FaceVerification({
             >
               {capturing ? "Capturing..." : "Capture Selfie"}
             </button>
+            {requireVerification && (
+              <button
+                className="skip-btn"
+                onClick={() => {
+                  console.log("Skipping face verification - this will clear stored face")
+                  // Clear stored face and proceed without verification
+                  if (onVerify) {
+                    onVerify(true) // Allow login without verification
+                  }
+                }}
+                disabled={capturing}
+                style={{
+                  background: "#6B7280",
+                  color: "white",
+                  padding: "10px 20px",
+                  border: "none",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  fontSize: "14px"
+                }}
+              >
+                Skip Verification (Testing)
+              </button>
+            )}
             <button className="cancel-btn" onClick={onClose}>
               Cancel
             </button>

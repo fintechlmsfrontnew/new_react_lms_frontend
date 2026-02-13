@@ -5,7 +5,7 @@
 
 const SESSION_TIMEOUT = 20 * 60 * 1000 // 20 minutes in milliseconds
 
-let inactivityTimer: NodeJS.Timeout | null = null
+let inactivityTimer: ReturnType<typeof setTimeout> | null = null
 let onLogoutCallback: (() => void) | null = null
 
 /**
