@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { loginUser } from "../services/authService"
 import { FaceVerification } from "../components/FaceVerification"
-import { getStoredFaceDescriptor, storeFaceDescriptor, clearFaceDescriptor } from "../utils/faceStorage"
+import { getStoredFaceDescriptor, storeFaceDescriptor } from "../utils/faceStorage"
 import { logger } from "../utils/logger"
 import "./LoginPage.css"
 
@@ -168,29 +168,6 @@ export function LoginPage() {
             <div className="login-field-error">
               <span className="login-error-icon">✕</span>
               <span className="login-error-text">{error}</span>
-              {error.includes("Face verification failed") && storedFaceDescriptor && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    clearFaceDescriptor(email)
-                    setStoredFaceDescriptor(null)
-                    setError("Stored face cleared. Please try logging in again to register a new face.")
-                    logger.log("Stored face cleared for:", email)
-                  }}
-                  style={{
-                    marginTop: "8px",
-                    padding: "6px 12px",
-                    background: "#EF4444",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    fontSize: "12px"
-                  }}
-                >
-                  Clear Stored Face & Register New
-                </button>
-              )}
             </div>
           )}
 
@@ -259,7 +236,7 @@ export function LoginPage() {
             } else {
               // Face verification failed - REJECT login
               logger.log("Face verification FAILED - REJECTING login")
-              setError("Face verification failed. Your face does not match the registered face. Only the registered user can login. Click 'Clear Stored Face' to register a new face.")
+              setError("Face verification failed. Your face does not match the registered face.")
               setShowFaceVerification(false)
               setPendingLogin(false)
               // Clear any pending state

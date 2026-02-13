@@ -4,6 +4,72 @@ import Webcam from "react-webcam"
 import { logger } from "../utils/logger"
 import "./FaceVerification.css"
 
+/**
+ * Eye Aspect Ratio (EAR) calculation for liveness detection
+ * Checks if eyes are open or closed
+ * EAR < 0.25 typically means eyes are closed
+ */
+const calculateEyeAspectRatio = (eyeLandmarks: any[]): number => {
+  // Eye landmarks: 6 points per eye
+  // Points: [0, 1, 2, 3, 4, 5]
+  // Vertical distances
+  const vertical1 = Math.sqrt(
+    Math.pow(eyeLandmarks[1].x - eyeLandmarks[5].x, 2) +
+    Math.pow(eyeLandmarks[1].y - eyeLandmarks[5].y, 2)
+  )
+  const vertical2 = Math.sqrt(
+    Math.pow(eyeLandmarks[2].x - eyeLandmarks[4].x, 2) +
+    Math.pow(eyeLandmarks[2].y - eyeLandmarks[4].y, 2)
+  )
+  // Horizontal distance
+  const horizontal = Math.sqrt(
+    Math.pow(eyeLandmarks[0].x - eyeLandmarks[3].x, 2) +
+    Math.pow(eyeLandmarks[0].y - eyeLandmarks[3].y, 2)
+  )
+  
+  // EAR formula
+  const ear = (vertical1 + vertical2) / (2.0 * horizontal)
+  return ear
+}
+
+/**
+ * Check if eyes are open using Eye Aspect Ratio
+ * Returns true if eyes are open, false if closed
+ */
+const areEyesOpen = (landmarks: any): boolean => {
+  try {
+    // Get eye landmarks
+    // Left eye: points 36-41 (indices 36-41)
+    // Right eye: points 42-47 (indices 42-47)
+    const leftEye = landmarks.positions.slice(36, 42)
+    const rightEye = landmarks.positions.slice(42, 48)
+    
+    // Calculate EAR for both eyes
+    const leftEAR = calculateEyeAspectRatio(leftEye)
+    const rightEAR = calculateEyeAspectRatio(rightEye)
+    
+    // Average EAR
+    const avgEAR = (leftEAR + rightEAR) / 2.0
+    
+    // Threshold: 0.25 (below this = eyes closed)
+    const EYE_OPEN_THRESHOLD = 0.25
+    
+    logger.log("Eye Detection:", {
+      leftEAR: leftEAR.toFixed(4),
+      rightEAR: rightEAR.toFixed(4),
+      avgEAR: avgEAR.toFixed(4),
+      threshold: EYE_OPEN_THRESHOLD,
+      eyesOpen: avgEAR >= EYE_OPEN_THRESHOLD
+    })
+    
+    return avgEAR >= EYE_OPEN_THRESHOLD
+  } catch (error) {
+    logger.error("Error checking eyes:", error)
+    // If error, assume eyes are open (fail-safe)
+    return true
+  }
+}
+
 interface FaceVerificationProps {
   onFaceCaptured: (imageData: string, faceDescriptor?: Float32Array) => void
   onClose: () => void
@@ -35,6 +101,7 @@ export function FaceVerification({
   const [capturing, setCapturing] = useState(false)
   const [error, setError] = useState<string>("")
   const [verificationResult, setVerificationResult] = useState<boolean | null>(null)
+  const [eyesOpen, setEyesOpen] = useState<boolean | null>(null) // Real-time eye detection
 
   // Load face-api.js models
   useEffect(() => {
@@ -114,11 +181,26 @@ export function FaceVerification({
           faceapi.draw.drawDetections(canvas, resizedDetections)
           faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
 
-          // Check if face is detected
+          // Check if face is detected and eyes are open
           if (detections.length > 0) {
             setFaceDetected(true)
+            
+            // Real-time eye detection for liveness check
+            try {
+              const landmarks = detections[0].landmarks
+              if (landmarks) {
+                const eyesAreOpen = areEyesOpen(landmarks)
+                setEyesOpen(eyesAreOpen)
+              } else {
+                setEyesOpen(null)
+              }
+            } catch (err) {
+              // If eye detection fails, don't block face detection
+              setEyesOpen(null)
+            }
           } else {
             setFaceDetected(false)
+            setEyesOpen(null)
           }
         }
       } catch (err) {
@@ -166,8 +248,30 @@ export function FaceVerification({
           return
         }
 
-        // Get face descriptor
-        faceDescriptor = detections[0].descriptor
+        // Get face descriptor and landmarks
+        const detection = detections[0]
+        faceDescriptor = detection.descriptor
+        const landmarks = detection.landmarks
+
+        // LIVENESS DETECTION: Check if eyes are open
+        if (!landmarks) {
+          setError("Face landmarks not detected. Please ensure your face is clearly visible and try again.")
+          setCapturing(false)
+          return
+        }
+
+        const eyesOpen = areEyesOpen(landmarks)
+        
+        if (!eyesOpen) {
+          setError("Eyes closed detected. Please open your eyes and try again.")
+          setCapturing(false)
+          if (onVerify) {
+            onVerify(false) // Reject - eyes closed
+          }
+          return
+        }
+
+        logger.log("Liveness check passed: Eyes are open")
 
         // If stored face descriptor provided, verify STRICTLY
         if (storedFaceDescriptor) {
@@ -196,7 +300,7 @@ export function FaceVerification({
 
           if (!isMatch) {
             // Face doesn't match - REJECT immediately
-            setError(`Face verification failed! Distance: ${distance.toFixed(3)} (threshold: 0.5). Your face does not match the registered face. Only the registered user can login.`)
+            setError("Face verification failed. Your face does not match the registered face.")
             setCapturing(false)
             setVerificationResult(false)
             // onVerify already called above with false
@@ -299,9 +403,28 @@ export function FaceVerification({
             />
             <canvas ref={canvasRef} className="face-canvas" />
             
-            {faceDetected && !error.includes("Models not found") && (
+            {faceDetected && !error.includes("Models not found") && eyesOpen !== false && (
               <div className="face-detected-indicator">
-                ✓ Face Detected
+                {eyesOpen === true && "✓ Face Detected - Eyes Open"}
+                {eyesOpen === null && "✓ Face Detected"}
+              </div>
+            )}
+            {eyesOpen === false && faceDetected && (
+              <div className="face-detected-indicator" style={{ 
+                background: "rgba(220, 38, 38, 0.95)",
+                color: "white",
+                animation: "gentlePulse 1s ease-in-out infinite",
+                whiteSpace: "normal",
+                wordWrap: "break-word",
+                maxWidth: "90%",
+                lineHeight: "1.5",
+                padding: "0.875rem 1.5rem",
+                fontSize: "0.9rem",
+                fontWeight: "600",
+                textAlign: "center",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)"
+              }}>
+                🚫 Eyes Closed - Please Open Your Eyes
               </div>
             )}
             {error.includes("Models not found") && (
@@ -325,7 +448,8 @@ export function FaceVerification({
 
           <div className="face-verification-instructions">
             <p>📸 Position your face in the center</p>
-            <p>👁️ Look directly at the camera</p>
+            <p>👁️ Look directly at the camera with eyes OPEN</p>
+            <p>🚫 Keep your eyes OPEN (closed eyes will fail verification)</p>
             <p>💡 Ensure good lighting</p>
           </div>
 
@@ -333,34 +457,10 @@ export function FaceVerification({
             <button
               className="capture-btn"
               onClick={captureSelfie}
-              disabled={capturing}
+              disabled={capturing || (eyesOpen === false)}
             >
               {capturing ? "Capturing..." : "Capture Selfie"}
             </button>
-            {requireVerification && (
-              <button
-                className="skip-btn"
-                onClick={() => {
-                  logger.log("Skipping face verification - this will clear stored face")
-                  // Clear stored face and proceed without verification
-                  if (onVerify) {
-                    onVerify(true) // Allow login without verification
-                  }
-                }}
-                disabled={capturing}
-                style={{
-                  background: "#6B7280",
-                  color: "white",
-                  padding: "10px 20px",
-                  border: "none",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontSize: "14px"
-                }}
-              >
-                Skip Verification (Testing)
-              </button>
-            )}
             <button className="cancel-btn" onClick={onClose}>
               Cancel
             </button>
